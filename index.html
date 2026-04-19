@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Anime Vault"/>
+<meta name="theme-color" content="#050510"/>
+<title>Anime Vault ⛩</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --red:#e11d48;--rd:#be123c;--gold:#f59e0b;
+  --bg:#050510;--c1:#0f0f1a;--c2:#1a1a2e;
+  --bdr:#1e293b;--mt:#4b5563;--sb:#374151;
+}
+html,body{min-height:100%;background:var(--bg);color:#fff;font-family:'Rajdhani',sans-serif}
+body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+
+/* ── HEADER ── */
+#hdr{position:sticky;top:0;z-index:100;background:linear-gradient(90deg,#0d0d1a,#1a0020,#0d0d1a);border-bottom:1px solid var(--red);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 30px rgba(225,29,72,.2);padding-top:max(11px,calc(env(safe-area-inset-top)+7px))}
+.logo{display:flex;align-items:center;gap:8px}
+.logo h1{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;background:linear-gradient(90deg,#fff,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.1em}
+.sv{text-align:center}
+.sv .n{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;line-height:1}
+.sv .l{font-size:8px;letter-spacing:.1em;color:var(--mt);margin-top:1px}
+#add-btn{background:linear-gradient(90deg,var(--red),var(--rd));border:none;border-radius:7px;padding:7px 13px;color:#fff;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 3px 12px rgba(225,29,72,.5)}
+
+/* ── MAIN ── */
+#main{max-width:1400px;margin:0 auto;padding:13px 12px 40px}
+
+/* ── PROGRESS ── */
+.pb-w{margin-bottom:13px}
+.pb-l{display:flex;justify-content:space-between;margin-bottom:4px;font-size:10px}
+.pb{height:4px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.pb-f{height:100%;background:linear-gradient(90deg,var(--red),#f43f5e);border-radius:2px;transition:width .5s}
+
+/* ── PODIUM ── */
+#pod{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:11px;padding:11px 13px;margin-bottom:13px;display:none}
+#pod.on{display:block}
+.pi{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border-radius:8px;padding:6px 10px;flex:1;min-width:110px}
+.pi img{width:28px;height:40px;object-fit:cover;border-radius:4px;background:var(--bdr);flex-shrink:0}
+.pn{color:#fff;font-size:10px;font-weight:700;line-height:1.3}
+.ps{color:var(--gold);font-size:11px;font-weight:700;font-family:'Orbitron',sans-serif}
+
+/* ── TABS ── */
+#tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.tb{padding:5px 11px;background:transparent;border:1px solid var(--bdr);border-radius:6px;color:#6b7280;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.07em;font-family:'Rajdhani',sans-serif;transition:all .2s}
+.tb.on{background:linear-gradient(90deg,var(--red),var(--rd));border-color:var(--red);color:#fff}
+#srch-w{flex:1;min-width:100px;max-width:180px}
+#srch{width:100%;background:#0d0d1a;border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;color:#fff;font-size:11px;font-family:'Rajdhani',sans-serif;outline:none}
+#srch:focus{border-color:var(--red)}
+#srt-s{background:#0d0d1a;border:1px solid var(--bdr);border-radius:6px;padding:5px 9px;color:#6b7280;font-size:10px;font-family:'Rajdhani',sans-serif;outline:none}
+
+/* ── GENRES ── */
+#gen{display:flex;gap:4px;margin-bottom:11px;flex-wrap:wrap}
+.gb{padding:3px 8px;background:transparent;border:1px solid var(--bdr);border-radius:20px;color:var(--mt);font-size:9px;cursor:pointer;font-family:'Rajdhani',sans-serif;transition:all .15s}
+.gb.on{background:var(--bdr);border-color:#4b5563;color:#fff}
+#ri{color:var(--sb);font-size:10px;letter-spacing:.06em;margin-bottom:9px}
+
+/* ── GRID ── */
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:9px}
+
+/* ── CARD ── */
+.card{background:linear-gradient(135deg,var(--c1),var(--c2));border:1px solid var(--bdr);border-radius:11px;overflow:hidden;transition:transform .2s,border-color .2s;position:relative}
+.card.w{border-color:var(--red)}.card.r{border-color:var(--gold)}
+.card:active{transform:scale(.97)}
+
+/* ── IMAGE ── */
+.ci{position:relative;width:100%;padding-top:143%;overflow:hidden;background:linear-gradient(135deg,#0a0a18,#14122a)}
+.ci img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.ci img.ok{opacity:1}
+.ci .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+.ci .ph .ic{font-size:24px;opacity:.18}
+.ci .ph .bar{width:24px;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);border-radius:1px;animation:sh 1.4s infinite}
+@keyframes sh{0%{transform:translateX(-200%)}100%{transform:translateX(500%)}}
+.sb2{position:absolute;top:5px;right:5px;background:linear-gradient(135deg,#92400e,#d97706);border-radius:5px;padding:2px 6px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:#fff;z-index:2}
+.wb2{position:absolute;top:5px;left:5px;background:rgba(225,29,72,.88);border-radius:4px;padding:2px 5px;font-size:7px;font-weight:700;color:#fff;z-index:2}
+/* edit pencil */
+.ec{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.7);border:none;border-radius:5px;color:#9ca3af;font-size:11px;cursor:pointer;padding:3px 6px;z-index:3;transition:color .2s;display:none}
+.card:hover .ec{display:block}
+.ec:hover{color:#fff}
+
+/* ── CARD BODY ── */
+.cb{padding:8px}
+.ct{color:#fff;font-size:11px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.ca{color:var(--sb);font-size:8px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px}
+.tg{background:var(--bdr);color:#94a3b8;font-size:8px;padding:2px 4px;border-radius:3px}
+.mr{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.mc{display:flex;align-items:center;gap:2px;font-size:8px}
+.mc .v{color:var(--gold);font-weight:700}.mc .v.e{color:var(--sb)}
+.ca-row{display:flex;gap:3px}
+.bw{flex:1;padding:5px 0;background:linear-gradient(90deg,var(--red),var(--rd));border:none;border-radius:5px;color:#fff;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.05em;font-family:'Rajdhani',sans-serif}
+.bw.on{background:transparent;border:1px solid var(--red);color:var(--red)}
+.br{padding:4px 6px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:5px;color:var(--gold);font-size:9px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;white-space:nowrap}
+
+/* ── LOAD MORE ── */
+#lmw{text-align:center;margin-top:18px;display:none}
+#lmb{padding:8px 26px;background:linear-gradient(90deg,var(--red),var(--rd));border:none;border-radius:8px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:.07em;font-family:'Rajdhani',sans-serif;box-shadow:0 3px 14px rgba(225,29,72,.4)}
+#empty{text-align:center;padding:50px 0;color:var(--sb);display:none}
+#empty.on{display:block}
+
+/* ── MODALS ── */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:flex-start;justify-content:center;z-index:500;backdrop-filter:blur(6px);padding:16px;overflow-y:auto;padding-top:max(20px,env(safe-area-inset-top))}
+.mo.on{display:flex}
+.mb{background:linear-gradient(135deg,#0d0d1a,#1a1128);border:1px solid var(--red);border-radius:16px;padding:20px;width:100%;max-width:420px;font-family:'Rajdhani',sans-serif;margin:auto}
+.ms{color:var(--red);font-size:9px;letter-spacing:.15em;margin-bottom:3px}
+.mn{color:#fff;font-size:16px;font-weight:700;margin-bottom:14px;line-height:1.3}
+
+/* global score */
+.gs{background:rgba(225,29,72,.08);border:1px solid rgba(225,29,72,.2);border-radius:9px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.gsv{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--gold)}
+
+/* rating rows */
+.rr{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.rrl{display:flex;align-items:center;gap:7px}
+.st{font-size:20px;cursor:pointer;color:#2d3748;line-height:1;transition:color .1s,transform .1s;user-select:none}
+.st.on{color:var(--gold)}.st:active{transform:scale(1.3)}
+.rn{color:#6b7280;font-size:10px;width:16px;text-align:right}
+
+/* form */
+.fg{margin-bottom:11px}
+.fl{color:#9ca3af;font-size:9px;letter-spacing:.1em;display:block;margin-bottom:4px}
+.fi,.fsel{width:100%;background:#0d0d1a;border:1px solid var(--sb);border-radius:7px;padding:8px 11px;color:#fff;font-size:13px;font-family:'Rajdhani',sans-serif;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--red)}
+textarea.fi{resize:vertical;min-height:60px}
+.tgw{display:flex;align-items:center;gap:10px}
+.tog{width:40px;height:22px;border-radius:11px;background:var(--sb);cursor:pointer;position:relative;transition:background .3s;flex-shrink:0}
+.tog.on{background:var(--red)}
+.tok{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .3s}
+.tog.on .tok{left:21px}
+
+/* image preview */
+.img-prev{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;margin-bottom:8px;display:none;background:var(--bdr)}
+.img-prev.on{display:block}
+.img-drop{border:2px dashed var(--sb);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:8px}
+.img-drop:hover{border-color:var(--red)}
+.img-drop p{color:var(--mt);font-size:11px}
+.img-drop input{display:none}
+
+/* action buttons */
+.mac{display:flex;gap:8px;margin-top:16px}
+.bc{flex:1;padding:10px;background:transparent;border:1px solid var(--sb);border-radius:7px;color:#9ca3af;cursor:pointer;font-size:12px;font-family:'Rajdhani',sans-serif}
+.bsv{flex:2;padding:10px;background:linear-gradient(90deg,var(--red),var(--rd));border:none;border-radius:7px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:.07em;font-family:'Rajdhani',sans-serif;box-shadow:0 3px 12px rgba(225,29,72,.4)}
+.bdel{padding:10px 12px;background:transparent;border:1px solid #dc2626;border-radius:7px;color:#dc2626;cursor:pointer;font-size:12px;font-family:'Rajdhani',sans-serif}
+
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--sb);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div class="logo"><span style="font-size:21px">⛩</span><h1>ANIME VAULT</h1></div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div class="sv"><div class="n" id="s-tot" style="color:#94a3b8">0</div><div class="l">TOTAL</div></div>
+    <div class="sv"><div class="n" id="s-w" style="color:var(--red)">0</div><div class="l">VUS</div></div>
+    <div class="sv"><div class="n" id="s-r" style="color:var(--gold)">0</div><div class="l">NOTÉS</div></div>
+    <div class="sv"><div class="n" id="s-u" style="color:#60a5fa">0</div><div class="l">À VOIR</div></div>
+    <button id="add-btn" onclick="openAdd()">＋</button>
+  </div>
+</div>
+
+<div id="main">
+  <div class="pb-w">
+    <div class="pb-l"><span style="color:var(--mt)">PROGRESSION</span><span style="color:var(--red)" id="pb-t">0%</span></div>
+    <div class="pb"><div class="pb-f" id="pb-f" style="width:0%"></div></div>
+  </div>
+  <div id="pod"><div style="color:var(--gold);font-size:10px;letter-spacing:.13em;margin-bottom:8px">🏆 TON TOP NOTÉ</div><div id="pl" style="display:flex;gap:5px;flex-wrap:wrap"></div></div>
+  <div id="tabs">
+    <button class="tb on" onclick="setTab('all',this)">TOUS</button>
+    <button class="tb" onclick="setTab('watched',this)">VUS</button>
+    <button class="tb" onclick="setTab('unwatched',this)">À VOIR</button>
+    <button class="tb" onclick="setTab('rated',this)">NOTÉS</button>
+    <div id="srch-w"><input id="srch" placeholder="🔍 MHA, AoT…" oninput="onQ()" autocomplete="off" autocorrect="off" spellcheck="false"/></div>
+    <select id="srt-s" onchange="onSrt()"><option value="title">A–Z</option><option value="year">ANNÉE</option><option value="rating">NOTE ↓</option></select>
+  </div>
+  <div id="gen"></div>
+  <div id="ri"></div>
+  <div id="grid"></div>
+  <div id="empty"><div style="font-size:36px;margin-bottom:8px">⛩</div><p style="font-size:12px;letter-spacing:.1em">AUCUN ANIMÉ TROUVÉ</p></div>
+  <div id="lmw"><button id="lmb" onclick="more()">CHARGER PLUS</button></div>
+</div>
+
+<!-- ══ RATING MODAL ══ -->
+<div id="rm" class="mo" onclick="if(event.target===this)closeRM()">
+  <div class="mb">
+    <div class="ms">NOTATION DÉTAILLÉE</div>
+    <div class="mn" id="rm-t"></div>
+    <div class="gs"><span style="color:#9ca3af;font-size:11px;letter-spacing:.07em">SCORE GLOBAL</span><div style="display:flex;align-items:baseline;gap:5px"><span class="gsv" id="rm-g">—</span><span style="color:var(--mt);font-size:11px">/5</span></div></div>
+    <div id="rm-c"></div>
+    <div class="mac"><button class="bc" onclick="closeRM()">ANNULER</button><button class="bsv" onclick="saveR()">ENREGISTRER</button></div>
+  </div>
+</div>
+
+<!-- ══ EDIT / ADD MODAL ══ -->
+<div id="em" class="mo" onclick="if(event.target===this)closeEM()">
+  <div class="mb">
+    <div class="ms" id="em-sub">MODIFIER</div>
+    <div class="mn" id="em-ttl">ANIMÉ</div>
+
+    <!-- Image section -->
+    <div class="fg">
+      <label class="fl">IMAGE</label>
+      <img id="em-prev" class="img-prev" alt="preview"/>
+      <div class="img-drop" onclick="document.getElementById('em-file').click()">
+        <p>📷 Clique pour choisir une image<br/><span style="font-size:9px;color:var(--sb)">ou colle une URL ci-dessous</span></p>
+        <input type="file" id="em-file" accept="image/*" onchange="onImgFile(event)"/>
+      </div>
+      <input class="fi" id="em-url" placeholder="URL de l'image (optionnel)" oninput="onImgUrl()" style="margin-top:0"/>
+    </div>
+
+    <div class="fg"><label class="fl">TITRE</label><input class="fi" id="em-title" placeholder="Titre de l'animé…"/></div>
+    <div class="fg"><label class="fl">ABRÉVIATIONS / ALIAS (séparés par virgule)</label><input class="fi" id="em-alias" placeholder="MHA, Boku no Hero, BnHA…"/></div>
+    <div class="fg"><label class="fl">GENRE</label><select class="fsel" id="em-genre"></select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="fg"><label class="fl">ÉPISODES</label><input class="fi" id="em-ep" type="number" placeholder="24"/></div>
+      <div class="fg"><label class="fl">ANNÉE</label><input class="fi" id="em-year" type="number" placeholder="2024"/></div>
+    </div>
+    <div class="fg">
+      <div class="tgw">
+        <span class="fl" style="margin-bottom:0">DÉJÀ VU</span>
+        <div class="tog" id="em-tog" onclick="this.classList.toggle('on')"><div class="tok"></div></div>
+      </div>
+    </div>
+    <div class="mac" id="em-btns">
+      <button class="bc" onclick="closeEM()">ANNULER</button>
+      <button class="bsv" id="em-save" onclick="saveEM()">ENREGISTRER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// ══════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════
+const RC=[
+  {key:"histoire",   label:"Histoire",    icon:"📖"},
+  {key:"animation",  label:"Animation",   icon:"🎨"},
+  {key:"personnages",label:"Personnages",  icon:"👤"},
+  {key:"musique",    label:"Musique/OST", icon:"🎵"},
+  {key:"emotion",    label:"Émotion",     icon:"💙"},
+];
+const GENRES=["Tous","Shonen","Shojo","Seinen","Dark Fantasy","Thriller","Action","Romance","Sci-Fi","Isekai","Sports","Slice of Life","Comédie","Mecha","Ghibli","Fantasy"];
+const SK="av7";
+const PP=24;
+
+// ══════════════════════════════════════════════
+// KITSU SLUGS — one per unique anime id
+// ══════════════════════════════════════════════
+const KS={
+  1:"naruto",
+  2:"naruto-shippuden",
+  3:"one-piece",
+  4:"dragon-ball-z",
+  5:"dragon-ball",
+  6:"dragon-ball-super",
+  7:"dragon-ball-gt",
+  8:"bleach",
+  9:"bleach-thousand-year-blood-war",
+  10:"my-hero-academia",
+  11:"demon-slayer-kimetsu-no-yaiba",
+  12:"jujutsu-kaisen",
+  13:"jujutsu-kaisen-2nd-season",
+  14:"black-clover",
+  15:"fairy-tail",
+  16:"hunter-x-hunter-2011",
+  17:"yu-yu-hakusho",
+  18:"rurouni-kenshin",
+  19:"inuyasha",
+  20:"katekyo-hitman-reborn",
+  21:"assassination-classroom",
+  22:"kaiju-no-8",
+  23:"mashle-magic-and-muscles",
+  24:"dan-da-dan",
+  25:"nanatsu-no-taizai",
+  26:"dr-stone",
+  27:"enen-no-shouboutai",
+  28:"tokyo-revengers",
+  29:"jojos-bizarre-adventure",
+  30:"soul-eater",
+  31:"fullmetal-alchemist-brotherhood",
+  32:"fullmetal-alchemist",
+  33:"solo-leveling",
+  34:"shingeki-no-kyojin",
+  35:"berserk",
+  36:"vinland-saga",
+  37:"chainsaw-man",
+  38:"goblin-slayer",
+  39:"made-in-abyss",
+  40:"akame-ga-kill",
+  41:"devilman-crybaby",
+  42:"death-note",
+  43:"monster",
+  44:"yakusoku-no-neverland",
+  45:"mirai-nikki",
+  46:"higurashi-no-naku-koro-ni",
+  47:"perfect-blue",
+  48:"neon-genesis-evangelion",
+  49:"steinsgate",
+  50:"psycho-pass",
+  51:"code-geass-hangyaku-no-lelouch",
+  52:"cowboy-bebop",
+  53:"ghost-in-the-shell-stand-alone-complex",
+  54:"86",
+  55:"akira",
+  56:"tengen-toppa-gurren-lagann",
+  57:"darling-in-the-franxx",
+  58:"sword-art-online",
+  59:"re-zero-kara-hajimeru-isekai-seikatsu",
+  60:"no-game-no-life",
+  61:"kono-subarashii-sekai-ni-shukufuku-wo",
+  62:"tate-no-yuusha-no-nariagari",
+  63:"mushoku-tensei-jobless-reincarnation",
+  64:"tensei-shitara-slime-datta-ken",
+  65:"overlord",
+  66:"log-horizon",
+  67:"kage-no-jitsuryokusha-ni-naritakute",
+  68:"kumo-desu-ga-nani-ka",
+  69:"shinchou-yuusha",
+  70:"kono-subarashii-sekai-ni-shukufuku-wo-2",
+  71:"shangri-la-frontier",
+  72:"arifureta-shokugyou-de-sekai-saikyou",
+  73:"isekai-wa-smartphone-to-tomo-ni",
+  74:"gate-jieitai-kanochi-nite-kaku-tatakaeri",
+  75:"bofuri-itai-no-wa-iya-nanode-bougyoryoku-ni-kyokufuri-shitai-to-omoimasu",
+  76:"sekai-saikou-no-ansatsusha-isekai-kizoku-ni-tensei-suru",
+  77:"honzuki-no-gekokujou",
+  78:"death-march-kara-hajimaru-isekai-kyousoukyoku",
+  79:"shigatsu-wa-kimi-no-uso",
+  80:"clannad",
+  81:"clannad-after-story",
+  82:"anohana",
+  83:"toradora",
+  84:"kaguya-sama-love-is-war",
+  85:"kimi-no-na-wa",
+  86:"koe-no-katachi",
+  87:"tenki-no-ko",
+  88:"fruits-basket-2019",
+  89:"ouran-koukou-host-club",
+  90:"sailor-moon",
+  91:"one-punch-man",
+  92:"mob-psycho-100",
+  93:"gintama",
+  94:"spy-x-family",
+  95:"saiki-kusuo-no-psi-nan",
+  96:"sousou-no-frieren",
+  97:"dungeon-meshi",
+  98:"oshi-no-ko",
+  99:"kusuriya-no-hitorigoto",
+  100:"baccano",
+  101:"samurai-champloo",
+  102:"mushishi",
+  103:"3-gatsu-no-lion",
+  104:"haikyuu",
+  105:"blue-lock",
+  106:"slam-dunk",
+  107:"kuroko-no-basket",
+  108:"eyeshield-21",
+  109:"hajime-no-ippo",
+  110:"dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka",
+  111:"tower-of-god",
+  112:"black-butler",
+  113:"noragami",
+  114:"natsume-yuujinchou",
+  115:"spirited-away",
+  116:"princess-mononoke",
+  117:"my-neighbor-totoro",
+  118:"howls-moving-castle",
+  119:"grave-of-the-fireflies",
+  120:"kikis-delivery-service",
+  121:"castle-in-the-sky",
+  122:"nausicaa-of-the-valley-of-the-wind",
+  123:"the-boy-and-the-heron",
+  124:"ponyo",
+  125:"k-on",
+  126:"yuru-camp",
+  127:"barakamon",
+  128:"ao-no-exorcist",
+  129:"d-gray-man",
+  130:"shaman-king-2021",
+  131:"owari-no-seraph",
+  132:"wind-breaker-2024",
+  133:"magi-the-labyrinth-of-magic",
+  134:"yonkishi-of-the-apocalypse",
+  135:"zom-100-zombie-ni-naru-made-ni-shitai-100-no-koto",
+  136:"undead-unluck",
+  137:"jojos-bizarre-adventure-diamond-is-unbreakable",
+  138:"jojos-bizarre-adventure-golden-wind",
+  139:"jojos-bizarre-adventure-stone-ocean",
+  140:"tokyo-ghoul",
+  141:"parasyte-the-maxim",
+  142:"elfen-lied",
+  143:"angel-beats",
+  144:"sword-art-online-alicization",
+  145:"no-game-no-life-zero",
+  146:"kono-subarashii-sekai-ni-bakuen-wo",
+  147:"re-zero-kara-hajimeru-isekai-seikatsu-2nd-season",
+  148:"overlord-iv",
+  149:"tate-no-yuusha-no-nariagari-season-2",
+  150:"mushoku-tensei-jobless-reincarnation-part-2",
+  151:"kage-no-jitsuryokusha-ni-naritakute-season-2",
+  152:"tensei-shitara-slime-datta-ken-2nd-season",
+  153:"honzuki-no-gekokujou-season-2",
+  154:"bofuri-season-2",
+  155:"vinland-saga-season-2",
+  156:"shingeki-no-kyojin-the-final-season",
+  157:"bleach-thousand-year-blood-war-the-separation",
+  158:"kimetsu-no-yaiba-katanakaji-no-sato-hen",
+  159:"boku-no-hero-academia-7th-season",
+  160:"dr-stone-new-world",
+  161:"spy-x-family-season-2",
+  162:"spy-x-family-code-white",
+  163:"one-punch-man-season-2",
+  164:"mob-psycho-100-iii",
+  165:"kaguya-sama-love-is-war-ultra-romantic",
+  166:"boku-no-kokoro-no-yabai-yatsu",
+  167:"ao-no-hako",
+  168:"yubisaki-to-renren",
+  169:"wolf-children",
+  170:"toki-wo-kakeru-shoujo",
+  171:"summer-wars",
+  172:"kaze-tachinu",
+  173:"kurenai-no-buta",
+  174:"kaguya-hime-no-monogatari",
+  175:"pom-poko",
+  176:"omoide-no-marnie",
+  177:"nana",
+  178:"lovely-complex",
+  179:"kimi-ni-todoke",
+  180:"skip-beat",
+  181:"cardcaptor-sakura",
+  182:"nichijou",
+  183:"grand-blue-dreaming",
+  184:"gekkan-shoujo-nozaki-kun",
+  185:"golden-kamuy",
+  186:"ping-pong-the-animation",
+  187:"spice-and-wolf",
+  188:"baki-2018",
+  189:"run-with-the-wind",
+  190:"chihayafuru",
+  191:"yowamushi-pedal",
+  192:"captain-tsubasa-2018",
+  193:"free-iwatobi-swim-club",
+  194:"prince-of-tennis",
+  195:"ashita-no-joe",
+  196:"toriko",
+  197:"the-tatami-galaxy",
+  198:"non-non-biyori",
+  199:"oregairu",
+  200:"vivy-fluorite-eyes-song",
+  201:"planetes",
+  202:"trigun",
+  203:"aldnoah-zero",
+  204:"mobile-suit-gundam-wing",
+  205:"serial-experiments-lain",
+  206:"ergo-proxy",
+  207:"paprika",
+  208:"oshi-no-ko-2nd-season",
+  209:"shangri-la-frontier-season-2",
+  210:"i-want-to-eat-your-pancreas",
+  211:"one-piece-film-red",
+  212:"dragon-ball-super-broly",
+  213:"haikyuu-the-dumpster-battle",
+  214:"slam-dunk-the-movie",
+  215:"demon-slayer-kimetsu-no-yaiba-to-the-hashira-training",
+  216:"kaguya-sama-love-is-war-3rd-season",
+  217:"saiki-kusuo-no-psi-nan-2",
+  218:"hajime-no-ippo-new-challenger",
+  219:"kuroko-no-basket-last-game",
+  220:"jojos-bizarre-adventure-stardust-crusaders",
+  221:"attack-on-titan-season-2",
+  222:"tokyo-revengers-tenjiku-arc",
+  223:"dr-stone-stone-wars",
+  224:"black-clover-sword-of-the-wizard-king",
+  225:"demon-slayer-kimetsu-no-yaiba-mugen-train",
+  226:"my-hero-academia-youre-next",
+  227:"neon-genesis-evangelion-the-end-of-evangelion",
+  228:"re-zero-memory-snow",
+  229:"sword-art-online-ii",
+  230:"overlord-ii",
+  231:"the-rising-of-the-shield-hero-season-3",
+  232:"konosuba-an-explosion-on-this-wonderful-world",
+  233:"tensei-shitara-slime-datta-ken-3rd-season",
+  234:"frieren-beyond-journeys-end",
+  235:"apothecary-diaries-season-2",
+  236:"sakamoto-days",
+  237:"lazarus",
+  238:"dragon-ball-daima",
+  239:"blue-lock-episode-nagi",
+  240:"make-my-abilities-average",
+  241:"isekai-quartet",
+  242:"skeleton-knight-in-another-world",
+  243:"banished-from-the-heros-party",
+  244:"the-faraway-paladin",
+  245:"trapped-in-a-dating-sim",
+};
+
+const IC={};// image cache: id -> url (kitsu or custom base64)
+
+async function getImg(id){
+  if(IC[id])return IC[id];
+  const slug=KS[id];
+  if(!slug)return null;
+  try{
+    const r=await fetch(`https://kitsu.io/api/edge/anime?filter[slug]=${encodeURIComponent(slug)}&fields[anime]=posterImage`,
+      {headers:{Accept:"application/vnd.api+json"}});
+    const d=await r.json();
+    const url=d?.data?.[0]?.attributes?.posterImage?.medium
+           || d?.data?.[0]?.attributes?.posterImage?.small||null;
+    if(url)IC[id]=url;
+    return url;
+  }catch{return null}
+}
+
+// ══════════════════════════════════════════════
+// DATABASE — 245 unique entries
+// ══════════════════════════════════════════════
+const BASE=[
+  // ── SHONEN ──
+  {id:1,  t:"Naruto",                                  al:["Naruto S1"],                              g:"Shonen",       ep:220, y:2002},
+  {id:2,  t:"Naruto Shippuden",                        al:["NS","Shippuden"],                         g:"Shonen",       ep:500, y:2007},
+  {id:3,  t:"One Piece",                               al:["OP"],                                     g:"Shonen",       ep:1100,y:1999},
+  {id:4,  t:"Dragon Ball Z",                           al:["DBZ"],                                    g:"Shonen",       ep:291, y:1989},
+  {id:5,  t:"Dragon Ball",                             al:["DB"],                                     g:"Shonen",       ep:153, y:1986},
+  {id:6,  t:"Dragon Ball Super",                       al:["DBS"],                                    g:"Shonen",       ep:131, y:2015},
+  {id:7,  t:"Dragon Ball GT",                          al:["DBGT"],                                   g:"Shonen",       ep:64,  y:1996},
+  {id:8,  t:"Bleach",                                  al:[],                                         g:"Shonen",       ep:366, y:2004},
+  {id:9,  t:"Bleach: Thousand-Year Blood War",         al:["TYBW","Bleach TYBW"],                     g:"Shonen",       ep:52,  y:2022},
+  {id:10, t:"My Hero Academia",                        al:["MHA","Boku no Hero","BnHA"],              g:"Shonen",       ep:138, y:2016},
+  {id:11, t:"Demon Slayer",                            al:["Kimetsu no Yaiba","KNY"],                 g:"Shonen",       ep:55,  y:2019},
+  {id:12, t:"Jujutsu Kaisen",                          al:["JJK"],                                    g:"Shonen",       ep:24,  y:2020},
+  {id:13, t:"Jujutsu Kaisen S2",                       al:["JJK S2"],                                 g:"Shonen",       ep:23,  y:2023},
+  {id:14, t:"Black Clover",                            al:["BC"],                                     g:"Shonen",       ep:170, y:2017},
+  {id:15, t:"Fairy Tail",                              al:["FT"],                                     g:"Shonen",       ep:328, y:2009},
+  {id:16, t:"Hunter x Hunter (2011)",                  al:["HxH","HXH"],                              g:"Shonen",       ep:148, y:2011},
+  {id:17, t:"Yu Yu Hakusho",                           al:["YYH","Ghost Fighter"],                    g:"Shonen",       ep:112, y:1992},
+  {id:18, t:"Rurouni Kenshin",                         al:["Kenshin","Samurai X"],                    g:"Shonen",       ep:94,  y:1996},
+  {id:19, t:"InuYasha",                                al:[],                                         g:"Shonen",       ep:167, y:2000},
+  {id:20, t:"Katekyo Hitman Reborn!",                  al:["KHR","Reborn"],                           g:"Shonen",       ep:203, y:2006},
+  {id:21, t:"Assassination Classroom",                 al:["AssClass","Ansatsu Kyoushitsu"],          g:"Shonen",       ep:47,  y:2015},
+  {id:22, t:"Kaiju No. 8",                             al:["Kaiju 8"],                                g:"Shonen",       ep:12,  y:2024},
+  {id:23, t:"Mashle: Magic and Muscles",               al:["Mashle"],                                 g:"Shonen",       ep:24,  y:2023},
+  {id:24, t:"Dandadan",                                al:["Dan Da Dan"],                             g:"Shonen",       ep:12,  y:2024},
+  {id:25, t:"The Seven Deadly Sins",                   al:["7DS","NNT","Nanatsu no Taizai"],          g:"Shonen",       ep:24,  y:2014},
+  {id:26, t:"Dr. Stone",                               al:["Dr Stone","DrStone"],                     g:"Shonen",       ep:24,  y:2019},
+  {id:27, t:"Fire Force",                              al:["Enen no Shouboutai","Enen"],              g:"Shonen",       ep:24,  y:2019},
+  {id:28, t:"Tokyo Revengers",                         al:["TR","TokRev"],                            g:"Shonen",       ep:24,  y:2021},
+  {id:29, t:"JoJo's Bizarre Adventure",                al:["JJBA","JoJo S1"],                         g:"Shonen",       ep:26,  y:2012},
+  {id:30, t:"Soul Eater",                              al:["SE"],                                     g:"Shonen",       ep:51,  y:2008},
+  {id:128,t:"Blue Exorcist",                           al:["Ao no Exorcist","ANE"],                   g:"Shonen",       ep:25,  y:2011},
+  {id:129,t:"D.Gray-man",                              al:["DGM","D Gray Man"],                       g:"Shonen",       ep:103, y:2006},
+  {id:130,t:"Shaman King (2021)",                      al:["Shaman King"],                            g:"Shonen",       ep:52,  y:2021},
+  {id:132,t:"Wind Breaker",                            al:["Windbreaker"],                            g:"Shonen",       ep:13,  y:2024},
+  {id:133,t:"Magi",                                    al:["Magi Labyrinth of Magic"],                g:"Shonen",       ep:25,  y:2012},
+  {id:134,t:"Four Knights of the Apocalypse",          al:["7DS S2","Quatre Chevaliers"],             g:"Shonen",       ep:24,  y:2023},
+  {id:136,t:"Undead Unluck",                           al:["UU"],                                     g:"Shonen",       ep:24,  y:2023},
+  {id:137,t:"JoJo: Diamond is Unbreakable",            al:["JJBA Part 4","DIU","Jojo Part 4"],        g:"Shonen",       ep:39,  y:2016},
+  {id:138,t:"JoJo: Golden Wind",                       al:["JJBA Part 5","GW","Vento Aureo"],         g:"Shonen",       ep:39,  y:2018},
+  {id:139,t:"JoJo: Stone Ocean",                       al:["JJBA Part 6","Stone Ocean"],              g:"Shonen",       ep:38,  y:2021},
+  {id:220,t:"JoJo: Stardust Crusaders",                al:["JJBA Part 3","Stardust Crusaders"],       g:"Shonen",       ep:48,  y:2014},
+  {id:140,t:"Tokyo Ghoul",                             al:["TG"],                                     g:"Dark Fantasy", ep:12,  y:2014},
+  {id:196,t:"Toriko",                                  al:[],                                         g:"Shonen",       ep:147, y:2011},
+  {id:214,t:"Slam Dunk: The First Movie",              al:["The First Slam Dunk"],                    g:"Sports",       ep:1,   y:2022},
+  {id:221,t:"Attack on Titan S2",                      al:["AoT S2","SNK S2"],                        g:"Dark Fantasy", ep:12,  y:2017},
+  {id:222,t:"Tokyo Revengers: Tenjiku Arc",            al:["TokRev S3"],                              g:"Shonen",       ep:13,  y:2023},
+  {id:223,t:"Dr. Stone: Stone Wars",                   al:["Dr Stone S2"],                            g:"Shonen",       ep:11,  y:2021},
+  {id:224,t:"Black Clover: Sword of the Wizard King",  al:["BC Film"],                                g:"Shonen",       ep:1,   y:2023},
+  {id:225,t:"Demon Slayer: Mugen Train",               al:["KNY Film","Mugen Train"],                 g:"Shonen",       ep:1,   y:2020},
+  {id:226,t:"MHA: You're Next",                        al:["MHA Film 4"],                             g:"Shonen",       ep:1,   y:2024},
+  {id:236,t:"Sakamoto Days",                           al:["Sakamoto"],                               g:"Shonen",       ep:13,  y:2025},
+  {id:238,t:"Dragon Ball Daima",                       al:["DB Daima","DBDM"],                        g:"Shonen",       ep:20,  y:2024},
+  {id:239,t:"Blue Lock: Episode Nagi",                 al:["Blue Lock Film"],                         g:"Sports",       ep:1,   y:2024},
+  // ── ACTION ──
+  {id:31, t:"Fullmetal Alchemist: Brotherhood",        al:["FMAB","FMA Brotherhood"],                 g:"Action",       ep:64,  y:2009},
+  {id:32, t:"Fullmetal Alchemist (2003)",              al:["FMA 2003","FMA"],                         g:"Action",       ep:51,  y:2003},
+  {id:33, t:"Solo Leveling",                           al:["SL"],                                     g:"Action",       ep:12,  y:2024},
+  // ── DARK FANTASY ──
+  {id:34, t:"Attack on Titan",                         al:["AoT","AOT","SNK","Shingeki no Kyojin"],   g:"Dark Fantasy", ep:87,  y:2013},
+  {id:35, t:"Berserk (1997)",                          al:["Berserk"],                                g:"Dark Fantasy", ep:25,  y:1997},
+  {id:36, t:"Vinland Saga",                            al:["VS S1"],                                  g:"Dark Fantasy", ep:24,  y:2019},
+  {id:155,t:"Vinland Saga S2",                         al:["VS S2"],                                  g:"Dark Fantasy", ep:24,  y:2023},
+  {id:37, t:"Chainsaw Man",                            al:["CSM"],                                    g:"Dark Fantasy", ep:12,  y:2022},
+  {id:38, t:"Goblin Slayer",                           al:["GS"],                                     g:"Dark Fantasy", ep:12,  y:2018},
+  {id:39, t:"Made in Abyss",                           al:["MiA"],                                    g:"Dark Fantasy", ep:13,  y:2017},
+  {id:40, t:"Akame ga Kill!",                          al:["AgK"],                                    g:"Dark Fantasy", ep:24,  y:2014},
+  {id:41, t:"Devilman Crybaby",                        al:["Devilman"],                               g:"Dark Fantasy", ep:10,  y:2018},
+  {id:131,t:"Seraph of the End",                       al:["Owari no Seraph","ONS"],                  g:"Dark Fantasy", ep:12,  y:2015},
+  {id:142,t:"Elfen Lied",                              al:[],                                         g:"Dark Fantasy", ep:13,  y:2004},
+  {id:141,t:"Parasyte: The Maxim",                     al:["Parasyte","Kiseijuu"],                    g:"Sci-Fi",       ep:24,  y:2014},
+  {id:156,t:"AoT: Final Season",                       al:["SNK Final","AoT S4"],                     g:"Dark Fantasy", ep:28,  y:2020},
+  // ── THRILLER ──
+  {id:42, t:"Death Note",                              al:["DN"],                                     g:"Thriller",     ep:37,  y:2006},
+  {id:43, t:"Monster",                                 al:[],                                         g:"Thriller",     ep:74,  y:2004},
+  {id:44, t:"The Promised Neverland",                  al:["TPN","Yakusoku no Neverland"],            g:"Thriller",     ep:12,  y:2019},
+  {id:45, t:"Mirai Nikki",                             al:["Future Diary"],                           g:"Thriller",     ep:26,  y:2011},
+  {id:46, t:"Higurashi: When They Cry",                al:["Higurashi"],                              g:"Thriller",     ep:26,  y:2006},
+  {id:47, t:"Perfect Blue",                            al:[],                                         g:"Thriller",     ep:1,   y:1997},
+  // ── SCI-FI ──
+  {id:48, t:"Neon Genesis Evangelion",                 al:["NGE","Eva","Evangelion"],                 g:"Sci-Fi",       ep:26,  y:1995},
+  {id:49, t:"Steins;Gate",                             al:["SG","Steins Gate"],                       g:"Sci-Fi",       ep:24,  y:2011},
+  {id:50, t:"Psycho-Pass",                             al:["PP"],                                     g:"Sci-Fi",       ep:22,  y:2012},
+  {id:51, t:"Code Geass",                              al:["CG"],                                     g:"Sci-Fi",       ep:25,  y:2006},
+  {id:52, t:"Cowboy Bebop",                            al:["CB"],                                     g:"Sci-Fi",       ep:26,  y:1998},
+  {id:53, t:"Ghost in the Shell: SAC",                 al:["GitS SAC","GITS"],                        g:"Sci-Fi",       ep:26,  y:2002},
+  {id:54, t:"86 - Eighty Six",                         al:["86","Eighty Six"],                        g:"Sci-Fi",       ep:23,  y:2021},
+  {id:55, t:"Akira",                                   al:[],                                         g:"Sci-Fi",       ep:1,   y:1988},
+  {id:200,t:"Vivy: Fluorite Eye's Song",               al:["Vivy"],                                   g:"Sci-Fi",       ep:13,  y:2021},
+  {id:201,t:"Planetes",                                al:[],                                         g:"Sci-Fi",       ep:26,  y:2003},
+  {id:202,t:"Trigun",                                  al:[],                                         g:"Sci-Fi",       ep:26,  y:1998},
+  {id:205,t:"Serial Experiments Lain",                 al:["Lain","SEL"],                             g:"Sci-Fi",       ep:13,  y:1998},
+  {id:206,t:"Ergo Proxy",                              al:[],                                         g:"Sci-Fi",       ep:23,  y:2006},
+  {id:207,t:"Paprika",                                 al:["Paprika film"],                           g:"Sci-Fi",       ep:1,   y:2006},
+  {id:170,t:"The Girl Who Leapt Through Time",         al:["Toki wo Kakeru Shoujo"],                  g:"Sci-Fi",       ep:1,   y:2006},
+  {id:171,t:"Summer Wars",                             al:[],                                         g:"Sci-Fi",       ep:1,   y:2009},
+  {id:227,t:"End of Evangelion",                       al:["EoE","NGE Film"],                         g:"Sci-Fi",       ep:1,   y:1997},
+  // ── MECHA ──
+  {id:56, t:"Gurren Lagann",                           al:["TTGL","Tengen Toppa"],                    g:"Mecha",        ep:27,  y:2007},
+  {id:57, t:"Darling in the FranXX",                   al:["DitF","FranXX"],                          g:"Mecha",        ep:24,  y:2018},
+  {id:203,t:"Aldnoah.Zero",                            al:["AZ"],                                     g:"Mecha",        ep:24,  y:2014},
+  {id:204,t:"Mobile Suit Gundam Wing",                 al:["Gundam Wing","MSGW"],                     g:"Mecha",        ep:49,  y:1995},
+  // ── ISEKAI ──
+  {id:58, t:"Sword Art Online",                        al:["SAO"],                                    g:"Isekai",       ep:25,  y:2012},
+  {id:144,t:"SAO: Alicization",                        al:["SAO S3"],                                 g:"Isekai",       ep:47,  y:2018},
+  {id:229,t:"SAO II: Gun Gale Online",                 al:["SAO S2","GGO"],                           g:"Isekai",       ep:24,  y:2014},
+  {id:59, t:"Re:Zero",                                 al:["ReZero","Re Zero"],                       g:"Isekai",       ep:50,  y:2016},
+  {id:147,t:"Re:Zero S2",                              al:["ReZero S2"],                              g:"Isekai",       ep:25,  y:2020},
+  {id:60, t:"No Game No Life",                         al:["NGNL"],                                   g:"Isekai",       ep:12,  y:2014},
+  {id:145,t:"No Game No Life: Zero",                   al:["NGNL Zero","NGNL Film"],                  g:"Isekai",       ep:1,   y:2017},
+  {id:61, t:"Konosuba",                                al:["KonoSuba"],                               g:"Isekai",       ep:10,  y:2016},
+  {id:70, t:"Konosuba S2",                             al:["KonoSuba S2"],                            g:"Isekai",       ep:10,  y:2017},
+  {id:146,t:"Konosuba: Legend of Crimson",             al:["KonoSuba Film"],                          g:"Isekai",       ep:1,   y:2019},
+  {id:232,t:"Konosuba: An Explosion on This World",    al:["Megumin Spin-off","Explosion Arc"],       g:"Isekai",       ep:12,  y:2023},
+  {id:62, t:"The Rising of the Shield Hero",           al:["Shield Hero","TnY"],                      g:"Isekai",       ep:25,  y:2019},
+  {id:149,t:"Shield Hero S2",                          al:["Tate S2"],                                g:"Isekai",       ep:13,  y:2022},
+  {id:231,t:"Shield Hero S3",                          al:["Tate S3"],                                g:"Isekai",       ep:13,  y:2023},
+  {id:63, t:"Mushoku Tensei",                          al:["MT","Jobless Reincarnation"],             g:"Isekai",       ep:23,  y:2021},
+  {id:150,t:"Mushoku Tensei S2",                       al:["MT S2"],                                  g:"Isekai",       ep:25,  y:2023},
+  {id:64, t:"That Time I Got Reincarnated as a Slime", al:["Tensura","TenSura","Rimuru"],             g:"Isekai",       ep:48,  y:2018},
+  {id:152,t:"Slime S2",                                al:["Tensura S2","TenSura S2"],                g:"Isekai",       ep:24,  y:2021},
+  {id:233,t:"Slime S3",                                al:["Tensura S3"],                             g:"Isekai",       ep:24,  y:2024},
+  {id:65, t:"Overlord",                                al:["Ainz","Overlord S1"],                     g:"Isekai",       ep:13,  y:2015},
+  {id:148,t:"Overlord IV",                             al:["Overlord S4"],                            g:"Isekai",       ep:13,  y:2022},
+  {id:230,t:"Overlord II",                             al:["Overlord S2"],                            g:"Isekai",       ep:13,  y:2018},
+  {id:66, t:"Log Horizon",                             al:["LH"],                                     g:"Isekai",       ep:25,  y:2013},
+  {id:67, t:"The Eminence in Shadow",                  al:["Shadow Garden","Kage Jitsu"],             g:"Isekai",       ep:20,  y:2022},
+  {id:151,t:"Eminence in Shadow S2",                   al:["Shadow Garden S2"],                       g:"Isekai",       ep:12,  y:2023},
+  {id:68, t:"I'm a Spider, So What?",                  al:["Kumo Desu ga","Spider Isekai"],           g:"Isekai",       ep:24,  y:2021},
+  {id:69, t:"Cautious Hero",                           al:["Shinchou Yuusha"],                        g:"Isekai",       ep:12,  y:2019},
+  {id:71, t:"Shangri-La Frontier",                     al:["Shangri La"],                             g:"Isekai",       ep:25,  y:2023},
+  {id:209,t:"Shangri-La Frontier S2",                  al:["Shangri La S2"],                          g:"Isekai",       ep:13,  y:2024},
+  {id:72, t:"Arifureta",                               al:[],                                         g:"Isekai",       ep:13,  y:2019},
+  {id:73, t:"In Another World With My Smartphone",     al:["Smartphone Isekai"],                      g:"Isekai",       ep:12,  y:2017},
+  {id:74, t:"Gate",                                    al:[],                                         g:"Isekai",       ep:24,  y:2015},
+  {id:75, t:"Bofuri",                                  al:["BOFURI"],                                 g:"Isekai",       ep:12,  y:2020},
+  {id:154,t:"Bofuri S2",                               al:["BOFURI S2"],                              g:"Isekai",       ep:12,  y:2023},
+  {id:76, t:"The World's Finest Assassin",             al:["Sekai Saikou"],                           g:"Isekai",       ep:12,  y:2021},
+  {id:77, t:"Ascendance of a Bookworm",                al:["Honzuki","Bookworm"],                     g:"Isekai",       ep:14,  y:2019},
+  {id:153,t:"Bookworm S2",                             al:["Honzuki S2"],                             g:"Isekai",       ep:14,  y:2020},
+  {id:78, t:"Death March",                             al:["Desu Machi"],                             g:"Isekai",       ep:12,  y:2018},
+  {id:135,t:"Zom 100",                                 al:["Zom100"],                                 g:"Isekai",       ep:12,  y:2023},
+  {id:241,t:"Isekai Quartet",                          al:["IQ"],                                     g:"Isekai",       ep:12,  y:2019},
+  {id:242,t:"Skeleton Knight in Another World",        al:["Gaikotsu Kishi"],                         g:"Isekai",       ep:12,  y:2022},
+  {id:243,t:"Banished from the Hero's Party",          al:["Shin no Nakama"],                         g:"Isekai",       ep:13,  y:2021},
+  {id:244,t:"The Faraway Paladin",                     al:["Saihate no Paladin"],                     g:"Isekai",       ep:12,  y:2021},
+  {id:245,t:"Trapped in a Dating Sim",                 al:["Otome Game Sekai wa Mob ni Kibishii"],    g:"Isekai",       ep:13,  y:2022},
+  {id:240,t:"Didn't I Say Make My Abilities Average?", al:["Noukin","Mile"],                          g:"Isekai",       ep:12,  y:2019},
+  // ── ROMANCE ──
+  {id:79, t:"Your Lie in April",                       al:["YLiA","Shigatsu"],                        g:"Romance",      ep:22,  y:2014},
+  {id:80, t:"Clannad",                                 al:[],                                         g:"Romance",      ep:23,  y:2007},
+  {id:81, t:"Clannad: After Story",                    al:["Clannad AS"],                             g:"Romance",      ep:24,  y:2008},
+  {id:82, t:"Anohana",                                 al:["AnoHana"],                                g:"Romance",      ep:11,  y:2011},
+  {id:83, t:"Toradora",                                al:[],                                         g:"Romance",      ep:25,  y:2008},
+  {id:84, t:"Kaguya-sama: Love is War",                al:["Kaguya","Love is War"],                   g:"Romance",      ep:13,  y:2019},
+  {id:216,t:"Kaguya-sama S3",                          al:["Love is War S3","Ultra Romantic"],        g:"Romance",      ep:13,  y:2022},
+  {id:165,t:"Kaguya-sama S3 (Ultra Romantic)",         al:["Kaguya S3"],                              g:"Romance",      ep:13,  y:2022},
+  {id:85, t:"Your Name",                               al:["Kimi no Na wa"],                          g:"Romance",      ep:1,   y:2016},
+  {id:86, t:"A Silent Voice",                          al:["Koe no Katachi"],                         g:"Romance",      ep:1,   y:2016},
+  {id:87, t:"Weathering With You",                     al:["Tenki no Ko"],                            g:"Romance",      ep:1,   y:2019},
+  {id:210,t:"I Want to Eat Your Pancreas",             al:["Kimi no Suizou","Pancreas"],              g:"Romance",      ep:1,   y:2018},
+  {id:143,t:"Angel Beats!",                            al:["Angel Beats"],                            g:"Romance",      ep:13,  y:2010},
+  {id:166,t:"The Dangers in My Heart",                 al:["Boku no Kokoro"],                         g:"Romance",      ep:13,  y:2023},
+  {id:167,t:"Blue Box",                                al:["Ao no Hako"],                             g:"Romance",      ep:25,  y:2024},
+  {id:168,t:"A Sign of Affection",                     al:["Yubisaki to Renren"],                     g:"Romance",      ep:12,  y:2024},
+  {id:199,t:"Oregairu",                                al:["My Teen Romantic Comedy SNAFU","OreGairu"],g:"Romance",     ep:13,  y:2013},
+  // ── SHOJO ──
+  {id:88, t:"Fruits Basket (2019)",                    al:["Furuba"],                                 g:"Shojo",        ep:25,  y:2019},
+  {id:89, t:"Ouran High School Host Club",             al:["Ouran","OHSHC"],                          g:"Shojo",        ep:26,  y:2006},
+  {id:90, t:"Sailor Moon",                             al:[],                                         g:"Shojo",        ep:200, y:1992},
+  {id:177,t:"Nana",                                    al:[],                                         g:"Shojo",        ep:47,  y:2006},
+  {id:178,t:"Lovely Complex",                          al:["LoveCom"],                                g:"Shojo",        ep:24,  y:2007},
+  {id:179,t:"Kimi ni Todoke",                          al:["From Me to You"],                         g:"Shojo",        ep:25,  y:2009},
+  {id:180,t:"Skip Beat!",                              al:["Skip Beat"],                              g:"Shojo",        ep:25,  y:2008},
+  {id:181,t:"Cardcaptor Sakura",                       al:["CCS","Sakura"],                           g:"Shojo",        ep:70,  y:1998},
+  // ── COMÉDIE ──
+  {id:91, t:"One Punch Man",                           al:["OPM"],                                    g:"Comédie",      ep:12,  y:2015},
+  {id:163,t:"One Punch Man S2",                        al:["OPM S2"],                                 g:"Comédie",      ep:12,  y:2019},
+  {id:92, t:"Mob Psycho 100",                          al:["MP100"],                                  g:"Comédie",      ep:12,  y:2016},
+  {id:164,t:"Mob Psycho 100 III",                      al:["MP100 S3"],                               g:"Comédie",      ep:13,  y:2022},
+  {id:93, t:"Gintama",                                 al:[],                                         g:"Comédie",      ep:367, y:2006},
+  {id:94, t:"Spy x Family",                            al:["SpyFam"],                                 g:"Comédie",      ep:25,  y:2022},
+  {id:161,t:"Spy x Family S2",                         al:["SpyFam S2"],                              g:"Comédie",      ep:13,  y:2023},
+  {id:162,t:"Spy x Family: Code White",                al:["SpyFam Film"],                            g:"Comédie",      ep:1,   y:2024},
+  {id:95, t:"Saiki K",                                 al:["Saiki Kusuo","Disastrous Life of Saiki K"],g:"Comédie",     ep:120, y:2016},
+  {id:217,t:"Saiki K S2",                              al:["Saiki Kusuo S2"],                         g:"Comédie",      ep:24,  y:2018},
+  {id:182,t:"Nichijou",                                al:["My Ordinary Life"],                       g:"Comédie",      ep:26,  y:2011},
+  {id:183,t:"Grand Blue",                              al:["Grand Blue Dreaming"],                    g:"Comédie",      ep:12,  y:2018},
+  {id:184,t:"Gekkan Shoujo Nozaki-kun",                al:["Nozaki-kun","Monthly Girls Nozaki"],      g:"Comédie",      ep:12,  y:2014},
+  // ── SEINEN ──
+  {id:96, t:"Frieren: Beyond Journey's End",           al:["Frieren","Sousou no Frieren"],            g:"Seinen",       ep:28,  y:2023},
+  {id:97, t:"Dungeon Meshi",                           al:["Delicious in Dungeon","DunMeshi"],        g:"Seinen",       ep:24,  y:2024},
+  {id:98, t:"Oshi no Ko",                              al:["ONK"],                                    g:"Seinen",       ep:11,  y:2023},
+  {id:208,t:"Oshi no Ko S2",                           al:["ONK S2"],                                 g:"Seinen",       ep:13,  y:2024},
+  {id:99, t:"Apothecary Diaries",                      al:["Kusuriya"],                               g:"Seinen",       ep:24,  y:2023},
+  {id:235,t:"Apothecary Diaries S2",                   al:["Kusuriya S2"],                            g:"Seinen",       ep:12,  y:2025},
+  {id:100,t:"Baccano!",                                al:[],                                         g:"Seinen",       ep:13,  y:2007},
+  {id:101,t:"Samurai Champloo",                        al:["SC"],                                     g:"Seinen",       ep:26,  y:2004},
+  {id:102,t:"Mushishi",                                al:[],                                         g:"Seinen",       ep:26,  y:2005},
+  {id:103,t:"March Comes in Like a Lion",              al:["3-gatsu no Lion","Sangatsu no Lion"],     g:"Seinen",       ep:22,  y:2016},
+  {id:185,t:"Golden Kamuy",                            al:["GK"],                                     g:"Seinen",       ep:36,  y:2018},
+  {id:186,t:"Ping Pong the Animation",                 al:["Ping Pong"],                              g:"Seinen",       ep:11,  y:2014},
+  {id:187,t:"Spice and Wolf",                          al:["Ookami to Koushinryou"],                  g:"Seinen",       ep:13,  y:2008},
+  {id:188,t:"Baki",                                    al:["Baki the Grappler"],                      g:"Seinen",       ep:26,  y:2018},
+  {id:197,t:"The Tatami Galaxy",                       al:["Yojouhan Shinwa Taikei"],                 g:"Seinen",       ep:11,  y:2010},
+  // ── SPORTS ──
+  {id:104,t:"Haikyuu!!",                               al:["Haikyuu","Volleyball Anime"],             g:"Sports",       ep:25,  y:2014},
+  {id:213,t:"Haikyuu: The Dumpster Battle",            al:["Haikyuu Film"],                           g:"Sports",       ep:1,   y:2024},
+  {id:105,t:"Blue Lock",                               al:["Bluelock"],                               g:"Sports",       ep:24,  y:2022},
+  {id:106,t:"Slam Dunk",                               al:["SD"],                                     g:"Sports",       ep:101, y:1993},
+  {id:107,t:"Kuroko no Basket",                        al:["KnB","KuroBas"],                          g:"Sports",       ep:75,  y:2012},
+  {id:219,t:"Kuroko no Basket: Last Game",             al:["KnB Film"],                               g:"Sports",       ep:1,   y:2017},
+  {id:108,t:"Eyeshield 21",                            al:["ES21"],                                   g:"Sports",       ep:145, y:2005},
+  {id:109,t:"Hajime no Ippo",                          al:["Fighting Spirit","Ippo"],                 g:"Sports",       ep:75,  y:2000},
+  {id:218,t:"Hajime no Ippo: New Challenger",          al:["Ippo S2","New Challenger"],               g:"Sports",       ep:26,  y:2009},
+  {id:189,t:"Run with the Wind",                       al:["Kaze ga Tsuyoku Fuiteiru"],               g:"Sports",       ep:23,  y:2018},
+  {id:190,t:"Chihayafuru",                             al:[],                                         g:"Sports",       ep:25,  y:2011},
+  {id:191,t:"Yowamushi Pedal",                         al:["Yowapeda"],                               g:"Sports",       ep:38,  y:2013},
+  {id:192,t:"Captain Tsubasa (2018)",                  al:["Tsubasa"],                                g:"Sports",       ep:52,  y:2018},
+  {id:193,t:"Free! - Iwatobi Swim Club",               al:["Free!","Iwatobi"],                        g:"Sports",       ep:12,  y:2013},
+  {id:194,t:"Prince of Tennis",                        al:["PoT","Tenipuri"],                         g:"Sports",       ep:178, y:2001},
+  {id:195,t:"Ashita no Joe",                           al:["Tomorrow's Joe"],                         g:"Sports",       ep:79,  y:1970},
+  // ── FANTASY ──
+  {id:110,t:"DanMachi",                                al:["Is It Wrong to Pick Up Girls in a Dungeon"],g:"Fantasy",    ep:13,  y:2015},
+  {id:111,t:"Tower of God",                            al:["ToG"],                                    g:"Fantasy",      ep:13,  y:2020},
+  {id:112,t:"Black Butler",                            al:["Kuroshitsuji","BB"],                      g:"Fantasy",      ep:24,  y:2008},
+  {id:113,t:"Noragami",                                al:[],                                         g:"Fantasy",      ep:12,  y:2014},
+  {id:114,t:"Natsume Yuujinchou",                      al:["Natsume's Book of Friends"],              g:"Fantasy",      ep:13,  y:2008},
+  {id:169,t:"Wolf Children",                           al:["Ookami Kodomo"],                          g:"Fantasy",      ep:1,   y:2012},
+  // ── GHIBLI ──
+  {id:115,t:"Spirited Away",                           al:["Sen to Chihiro","Chihiro"],               g:"Ghibli",       ep:1,   y:2001},
+  {id:116,t:"Princess Mononoke",                       al:["Mononoke Hime"],                          g:"Ghibli",       ep:1,   y:1997},
+  {id:117,t:"My Neighbor Totoro",                      al:["Totoro"],                                 g:"Ghibli",       ep:1,   y:1988},
+  {id:118,t:"Howl's Moving Castle",                    al:["Howl"],                                   g:"Ghibli",       ep:1,   y:2004},
+  {id:119,t:"Grave of the Fireflies",                  al:["Hotaru no Haka","Fireflies"],             g:"Ghibli",       ep:1,   y:1988},
+  {id:120,t:"Kiki's Delivery Service",                 al:["Kiki"],                                   g:"Ghibli",       ep:1,   y:1989},
+  {id:121,t:"Castle in the Sky",                       al:["Laputa"],                                 g:"Ghibli",       ep:1,   y:1986},
+  {id:122,t:"Nausicaä of the Valley of the Wind",      al:["Nausicaa"],                               g:"Ghibli",       ep:1,   y:1984},
+  {id:123,t:"The Boy and the Heron",                   al:["Kimitachi wa Dou Ikiru ka"],              g:"Ghibli",       ep:1,   y:2023},
+  {id:124,t:"Ponyo",                                   al:[],                                         g:"Ghibli",       ep:1,   y:2008},
+  {id:172,t:"The Wind Rises",                          al:["Kaze Tachinu"],                           g:"Ghibli",       ep:1,   y:2013},
+  {id:173,t:"Porco Rosso",                             al:["Kurenai no Buta"],                        g:"Ghibli",       ep:1,   y:1992},
+  {id:174,t:"The Tale of Princess Kaguya",             al:["Kaguya-hime no Monogatari"],              g:"Ghibli",       ep:1,   y:2013},
+  {id:175,t:"Pom Poko",                                al:[],                                         g:"Ghibli",       ep:1,   y:1994},
+  {id:176,t:"When Marnie Was There",                   al:["Omoide no Marnie"],                       g:"Ghibli",       ep:1,   y:2014},
+  // ── SLICE OF LIFE ──
+  {id:125,t:"K-On!",                                   al:["Keion","K On"],                           g:"Slice of Life",ep:13,  y:2009},
+  {id:126,t:"Yuru Camp",                               al:["Laid-Back Camp","YuruCamp"],              g:"Slice of Life",ep:12,  y:2018},
+  {id:127,t:"Barakamon",                               al:[],                                         g:"Slice of Life",ep:12,  y:2014},
+  {id:198,t:"Non Non Biyori",                          al:["NNB"],                                    g:"Slice of Life",ep:12,  y:2013},
+  // ── FILMS DIVERS ──
+  {id:211,t:"One Piece Film: Red",                     al:["OP Red"],                                 g:"Shonen",       ep:1,   y:2022},
+  {id:212,t:"Dragon Ball Super: Broly",                al:["DBS Broly"],                              g:"Shonen",       ep:1,   y:2018},
+  {id:215,t:"Demon Slayer: Hashira Training",          al:["KNY S4","Hashira Arc"],                   g:"Shonen",       ep:8,   y:2024},
+  {id:158,t:"Demon Slayer: Swordsmith Village",        al:["KNY S3"],                                 g:"Shonen",       ep:11,  y:2023},
+  {id:159,t:"MHA Season 7",                            al:["BNHA S7"],                                g:"Shonen",       ep:21,  y:2024},
+  {id:157,t:"Bleach TYBW: The Separation",             al:["TYBW Part 2"],                            g:"Shonen",       ep:13,  y:2023},
+  {id:160,t:"Dr. Stone: New World",                    al:["Dr Stone S3"],                            g:"Shonen",       ep:11,  y:2023},
+];
+
+// ══════════════════════════════════════════════
+// De-duplicate by id (safety check)
+// ══════════════════════════════════════════════
+const seenIds=new Set();
+const ANIMES_CLEAN=BASE.filter(a=>{if(seenIds.has(a.id))return false;seenIds.add(a.id);return true});
+// De-duplicate by title
+const seenTitles=new Set();
+const ANIMES=ANIMES_CLEAN.filter(a=>{const k=a.t.toLowerCase().trim();if(seenTitles.has(k))return false;seenTitles.add(k);return true});
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let A=[], ctab="all", cgen="Tous", csrt="title", cq="", cpg=1;
+let rtgt=null, tR={};
+let emTarget=null; // null = add mode, else = edit mode
+
+function save(){
+  try{localStorage.setItem(SK,JSON.stringify(A.map(a=>({id:a.id,w:a.w,rt:a.rt,img:a.img||null}))))}catch(e){}
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(SK);
+    if(raw){
+      const sv=JSON.parse(raw);const sm={};sv.forEach(s=>sm[s.id]=s);
+      A=ANIMES.map(b=>{const s=sm[b.id];return{...b,w:!!(s&&s.w),rt:(s&&s.rt)||{},img:(s&&s.img)||null}});
+      sv.forEach(s=>{if(!ANIMES.find(b=>b.id===s.id))A.push({id:s.id,t:s.t||"?",al:s.al||[],g:s.g||"Shonen",ep:s.ep||0,y:s.y||null,w:!!s.w,rt:s.rt||{},img:s.img||null})});
+      return;
+    }
+  }catch(e){}
+  A=ANIMES.map(b=>({...b,w:false,rt:{},img:null}));
+}
+
+function sc(r){
+  if(!r)return null;
+  const v=RC.map(c=>r[c.key]).filter(x=>x>0);
+  return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length*10)/10:null;
+}
+
+// ══════════════════════════════════════════════
+// GENRES & ADD-SELECT
+// ══════════════════════════════════════════════
+function buildGenres(){
+  const w=document.getElementById("gen");
+  GENRES.forEach(g=>{
+    const b=document.createElement("button");
+    b.className="gb"+(g==="Tous"?" on":"");b.textContent=g;
+    b.onclick=()=>{cgen=g;document.querySelectorAll(".gb").forEach(x=>x.classList.remove("on"));b.classList.add("on");go()};
+    w.appendChild(b);
+  });
+  const sel=document.getElementById("em-genre");
+  GENRES.slice(1).forEach(g=>{const o=document.createElement("option");o.value=g;o.textContent=g;sel.appendChild(o)});
+}
+
+// ══════════════════════════════════════════════
+// FILTER & SORT
+// ══════════════════════════════════════════════
+function filtered(){
+  let l=[...A];
+  if(ctab==="watched")   l=l.filter(a=>a.w);
+  if(ctab==="unwatched") l=l.filter(a=>!a.w);
+  if(ctab==="rated")     l=l.filter(a=>sc(a.rt)!==null);
+  if(cgen!=="Tous")      l=l.filter(a=>a.g===cgen);
+  if(cq){const lq=cq.toLowerCase();l=l.filter(a=>a.t.toLowerCase().includes(lq)||(a.al&&a.al.some(x=>x.toLowerCase().includes(lq))))}
+  if(csrt==="title") l.sort((a,b)=>a.t.localeCompare(b.t));
+  if(csrt==="year")  l.sort((a,b)=>(b.y||0)-(a.y||0));
+  if(csrt==="rating")l.sort((a,b)=>(sc(b.rt)||0)-(sc(a.rt)||0));
+  return l;
+}
+
+// ══════════════════════════════════════════════
+// STATS & PODIUM
+// ══════════════════════════════════════════════
+function stats(){
+  const w=A.filter(a=>a.w).length,r=A.filter(a=>sc(a.rt)!==null).length;
+  document.getElementById("s-tot").textContent=A.length;
+  document.getElementById("s-w").textContent=w;
+  document.getElementById("s-r").textContent=r;
+  document.getElementById("s-u").textContent=A.length-w;
+  const pct=A.length?Math.round(w/A.length*100):0;
+  document.getElementById("pb-f").style.width=pct+"%";
+  document.getElementById("pb-t").textContent=pct+"% · "+w+"/"+A.length;
+  const top=[...A].filter(a=>sc(a.rt)!==null).sort((a,b)=>(sc(b.rt)||0)-(sc(a.rt)||0)).slice(0,3);
+  const pod=document.getElementById("pod");
+  if(top.length){
+    pod.classList.add("on");
+    document.getElementById("pl").innerHTML=top.map((a,i)=>`
+      <div class="pi">
+        <img src="${a.img||IC[a.id]||''}" alt="" onerror="this.style.display='none'" style="${(a.img||IC[a.id])?'':'display:none'}"/>
+        <div><div class="pn">${a.t}</div><div class="ps">${sc(a.rt).toFixed(1)}</div></div>
+        <span style="font-size:16px;margin-left:auto">${["🥇","🥈","🥉"][i]}</span>
+      </div>`).join("");
+  }else pod.classList.remove("on");
+}
+
+// ══════════════════════════════════════════════
+// CARD HTML
+// ══════════════════════════════════════════════
+function cardHTML(a){
+  const s=sc(a.rt),hr=s!==null;
+  const imgSrc=a.img||IC[a.id]||"";
+  const mini=a.w&&hr?`<div class="mr">${RC.map(c=>`<div class="mc"><span>${c.icon}</span><span class="v${a.rt[c.key]?'':' e'}">${a.rt[c.key]||'—'}</span></div>`).join("")}</div>`:"";
+  return`<div class="card${a.w?(hr?" r":" w"):""}" id="c${a.id}">
+    <div class="ci" id="ci${a.id}">
+      <div class="ph"><span class="ic">⛩</span><div class="bar"></div></div>
+      <img id="img${a.id}" alt="${a.t}" ${imgSrc?`src="${imgSrc}"`:''}
+           onload="this.classList.add('ok')" onerror="this.remove()"
+           ${imgSrc?'class="ok"':''}/>
+      ${a.w?`<div class="wb2">✓ VU</div>`:""}
+      ${hr?`<div class="sb2">${s.toFixed(1)}</div>`:""}
+      <button class="ec" onclick="openEdit(${a.id})" title="Modifier">✏️</button>
+    </div>
+    <div class="cb">
+      <div class="ct">${a.t}</div>
+      ${a.al?.length?`<div class="ca">${a.al.slice(0,2).join(" · ")}</div>`:""}
+      <div class="ctg">
+        <span class="tg">${a.g}</span>
+        ${a.y?`<span class="tg">${a.y}</span>`:""}
+        ${a.ep>0?`<span class="tg">${a.ep===1?"Film":a.ep+" ép."}</span>`:""}
+      </div>
+      ${mini}
+      <div class="ca-row">
+        <button class="bw${a.w?" on":""}" onclick="tw(${a.id})">${a.w?"✓ VU":"MARQUER VU"}</button>
+        ${a.w?`<button class="br" onclick="oR(${a.id})">⭐ NOTER</button>`:""}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// LAZY LOAD
+// ══════════════════════════════════════════════
+let obs;
+function setupObs(){
+  if(!('IntersectionObserver' in window))return;
+  obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const id=parseInt(e.target.dataset.id);if(!id)return;
+      obs.unobserve(e.target);
+      const a=A.find(x=>x.id===id);
+      if(a&&a.img){const img=document.getElementById("img"+id);if(img){img.src=a.img;img.classList.add("ok")}return}
+      getImg(id).then(url=>{
+        if(!url)return;
+        const img=document.getElementById("img"+id);
+        if(img&&!img.src){img.src=url;img.classList.add("ok")}
+      });
+    });
+  },{rootMargin:"300px"});
+}
+function observeAll(){
+  if(!obs)return;
+  document.querySelectorAll(".ci[data-id]").forEach(el=>obs.observe(el));
+}
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+function render(){
+  const list=filtered(),vis=list.slice(0,cpg*PP);
+  const grid=document.getElementById("grid"),em2=document.getElementById("empty"),lmw=document.getElementById("lmw");
+  document.getElementById("ri").textContent=list.length+" animé"+(list.length>1?"s":"")+(list.length!==A.length?` (filtré${list.length>1?"s":""} sur ${A.length}`+")":"");
+  if(!list.length){grid.innerHTML="";em2.classList.add("on");lmw.style.display="none"}
+  else{
+    em2.classList.remove("on");
+    grid.innerHTML=vis.map(cardHTML).join("");
+    vis.forEach(a=>{
+      const el=document.getElementById("ci"+a.id);
+      if(!el)return;
+      el.dataset.id=a.id;
+      if(a.img){const img=document.getElementById("img"+a.id);if(img){img.src=a.img;img.classList.add("ok")}}
+      else if(IC[a.id]){const img=document.getElementById("img"+a.id);if(img){img.src=IC[a.id];img.classList.add("ok")}}
+    });
+    observeAll();
+    if(vis.length<list.length){lmw.style.display="block";document.getElementById("lmb").textContent=`CHARGER PLUS (${list.length-vis.length} restants)`}
+    else lmw.style.display="none";
+  }
+  stats();
+}
+function go(){cpg=1;render()}
+
+// ══════════════════════════════════════════════
+// ACTIONS
+// ══════════════════════════════════════════════
+function tw(id){const a=A.find(x=>x.id===id);if(!a)return;a.w=!a.w;if(!a.w)a.rt={};save();go()}
+function more(){cpg++;render()}
+function setTab(t,el){ctab=t;document.querySelectorAll(".tb").forEach(b=>b.classList.remove("on"));el.classList.add("on");go()}
+function onQ(){cq=document.getElementById("srch").value;go()}
+function onSrt(){csrt=document.getElementById("srt-s").value;go()}
+
+// ══════════════════════════════════════════════
+// RATING MODAL
+// ══════════════════════════════════════════════
+function oR(id){
+  const a=A.find(x=>x.id===id);if(!a)return;
+  rtgt=a;tR={...(a.rt||{})};
+  document.getElementById("rm-t").textContent=a.t;
+  buildRC();updGS();
+  document.getElementById("rm").classList.add("on");
+}
+function buildRC(){
+  const w=document.getElementById("rm-c");w.innerHTML="";
+  RC.forEach(cat=>{
+    const row=document.createElement("div");row.className="rr";
+    row.innerHTML=`<div class="rrl"><span style="font-size:15px">${cat.icon}</span><span style="color:#d1d5db;font-size:12px;font-weight:600;letter-spacing:.03em">${cat.label}</span></div><div style="display:flex;align-items:center;gap:7px"><div style="display:flex;gap:4px" id="sr-${cat.key}"></div><span class="rn" id="rn-${cat.key}">${tR[cat.key]||"—"}</span></div>`;
+    w.appendChild(row);bSt(cat.key);
+  });
+}
+function bSt(key){
+  const w=document.getElementById("sr-"+key);if(!w)return;w.innerHTML="";
+  for(let s=1;s<=5;s++){
+    const sp=document.createElement("span");sp.className="st"+(s<=(tR[key]||0)?" on":"");sp.textContent="★";
+    sp.onclick=()=>{tR[key]=(tR[key]===s)?0:s;bSt(key);document.getElementById("rn-"+key).textContent=tR[key]||"—";updGS()};
+    w.appendChild(sp);
+  }
+}
+function updGS(){const s=sc(tR);document.getElementById("rm-g").textContent=s!==null?s.toFixed(1):"—"}
+function saveR(){if(!rtgt)return;rtgt.rt={...tR};save();closeRM();go()}
+function closeRM(){document.getElementById("rm").classList.remove("on");rtgt=null}
+
+// ══════════════════════════════════════════════
+// EDIT / ADD MODAL
+// ══════════════════════════════════════════════
+let emImg=null; // pending base64 from file upload
+
+function openAdd(){
+  emTarget=null;emImg=null;
+  document.getElementById("em-sub").textContent="NOUVEAU";
+  document.getElementById("em-ttl").textContent="AJOUTER UN ANIMÉ";
+  document.getElementById("em-title").value="";
+  document.getElementById("em-alias").value="";
+  document.getElementById("em-genre").value="Shonen";
+  document.getElementById("em-ep").value="";
+  document.getElementById("em-year").value="";
+  document.getElementById("em-tog").classList.remove("on");
+  document.getElementById("em-url").value="";
+  document.getElementById("em-prev").className="img-prev";
+  // show delete btn? No for add
+  const btns=document.getElementById("em-btns");
+  btns.innerHTML=`<button class="bc" onclick="closeEM()">ANNULER</button><button class="bsv" id="em-save" onclick="saveEM()">AJOUTER</button>`;
+  document.getElementById("em").classList.add("on");
+}
+
+function openEdit(id){
+  const a=A.find(x=>x.id===id);if(!a)return;
+  emTarget=a;emImg=null;
+  document.getElementById("em-sub").textContent="MODIFIER";
+  document.getElementById("em-ttl").textContent=a.t;
+  document.getElementById("em-title").value=a.t;
+  document.getElementById("em-alias").value=(a.al||[]).join(", ");
+  document.getElementById("em-genre").value=a.g;
+  document.getElementById("em-ep").value=a.ep||"";
+  document.getElementById("em-year").value=a.y||"";
+  if(a.w)document.getElementById("em-tog").classList.add("on");
+  else document.getElementById("em-tog").classList.remove("on");
+  const imgSrc=a.img||IC[a.id]||"";
+  document.getElementById("em-url").value=imgSrc.startsWith("data:")?"":(imgSrc||"");
+  const prev=document.getElementById("em-prev");
+  if(imgSrc){prev.src=imgSrc;prev.className="img-prev on"}else{prev.className="img-prev"}
+  const btns=document.getElementById("em-btns");
+  btns.innerHTML=`<button class="bdel" onclick="delAnime(${id})">🗑 SUPPRIMER</button><button class="bc" onclick="closeEM()">ANNULER</button><button class="bsv" onclick="saveEM()">ENREGISTRER</button>`;
+  document.getElementById("em").classList.add("on");
+}
+
+function onImgFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    emImg=ev.target.result;
+    const prev=document.getElementById("em-prev");
+    prev.src=emImg;prev.className="img-prev on";
+    document.getElementById("em-url").value="";
+  };
+  reader.readAsDataURL(file);
+}
+function onImgUrl(){
+  const url=document.getElementById("em-url").value.trim();
+  if(!url){document.getElementById("em-prev").className="img-prev";emImg=null;return}
+  emImg=null;
+  const prev=document.getElementById("em-prev");
+  prev.src=url;prev.className="img-prev on";
+}
+
+function saveEM(){
+  const title=document.getElementById("em-title").value.trim();
+  if(!title)return;
+  const aliases=document.getElementById("em-alias").value.split(",").map(s=>s.trim()).filter(Boolean);
+  const genre=document.getElementById("em-genre").value;
+  const ep=parseInt(document.getElementById("em-ep").value)||0;
+  const year=parseInt(document.getElementById("em-year").value)||null;
+  const watched=document.getElementById("em-tog").classList.contains("on");
+  let imgFinal=emImg||null;
+  if(!imgFinal){const url=document.getElementById("em-url").value.trim();if(url)imgFinal=url;}
+
+  if(emTarget){
+    // edit existing
+    emTarget.t=title;emTarget.al=aliases;emTarget.g=genre;emTarget.ep=ep;emTarget.y=year;
+    emTarget.w=watched;if(!watched)emTarget.rt={};
+    if(imgFinal)emTarget.img=imgFinal;
+    else if(imgFinal===null&&document.getElementById("em-url").value.trim()===""){}// keep existing if url empty and no file
+  }else{
+    // add new
+    A.push({id:Date.now(),t:title,al:aliases,g:genre,ep,y:year,w:watched,rt:{},img:imgFinal});
+  }
+  save();closeEM();go();
+}
+
+function delAnime(id){
+  if(!confirm("Supprimer cet animé ?"))return;
+  A=A.filter(x=>x.id!==id);save();closeEM();go();
+}
+function closeEM(){document.getElementById("em").classList.remove("on");emTarget=null;emImg=null}
+
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
+load();buildGenres();setupObs();go();
+</script>
+</body>
+</html>
